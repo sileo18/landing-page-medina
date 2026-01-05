@@ -13,6 +13,21 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.classList.add('overflow-hidden')
+      document.documentElement.classList.add('bg-black')
+    } else {
+      document.body.classList.remove('overflow-hidden')
+      document.documentElement.classList.remove('bg-black')
+    }
+
+    return () => {
+      document.body.classList.remove('overflow-hidden')
+      document.documentElement.classList.remove('bg-black')
+    }
+  }, [isMobileMenuOpen])
+
   const menuItems = [
     { label: 'Início', href: '#inicio' },
     { label: 'Sobre', href: '#sobre' },
@@ -38,8 +53,6 @@ const Header = () => {
   }
 
   const handleWhatsAppClick = () => {
-
-
     const message = encodeURIComponent('Olá! Gostaria de agendar um horário na Mr Medina.')
     window.open(`https://wa.me/5511948557163?text=${message}`, '_blank')
   }
@@ -60,9 +73,7 @@ const Header = () => {
                 key={item.href}
                 href={item.href}
                 onClick={(e) => scrollToSection(e, item.href)}
-                className="text-sm text-white/60 hover:text-gol
-
-d transition-colors duration-300 tracking-wide"
+                className="text-sm text-white/60 hover:text-gold transition-colors duration-300 tracking-wide"
               >
                 {item.label}
               </a>
@@ -85,14 +96,28 @@ d transition-colors duration-300 tracking-wide"
         </div>
       </nav>
 
-      <div className={`lg:hidden fixed inset-0 bg-deep-black/98 transition-all duration-500 ${
-        isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-      }`}>
-        <div className="flex flex-col items-center justify-center h-full gap-8">
+      {/* Backdrop overlay for mobile menu */}
+      <div
+        className={`lg:hidden fixed inset-0 z-40 transition-all duration-500 ${
+          isMobileMenuOpen ? 'opacity-100 visible pointer-events-auto' : 'opacity-0 invisible pointer-events-none'
+        }`}
+        aria-hidden={isMobileMenuOpen ? 'false' : 'true'}
+      >
+        {/* Backdrop */}
+        <div
+          className={`absolute inset-0 bg-black/80 transition-all duration-500 ${
+            isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+        {/* Mobile menu content */}
+        <div
+          className={`relative flex flex-col items-center justify-center h-full gap-8 transition-transform duration-500 ${
+            isMobileMenuOpen ? 'translate-y-0' : '-translate-y-8'
+          }`}
+        >
           {menuItems.map((item) => (
-
-
-<a
+            <a
               key={item.href}
               href={item.href}
               onClick={(e) => scrollToSection(e, item.href)}
