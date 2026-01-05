@@ -90,7 +90,7 @@ d transition-colors duration-300 tracking-wide"
       }`}>
         <div className="flex flex-col items-center justify-center h-full gap-8">
           {menuItems.map((item) => (
-            
+
 
 <a
               key={item.href}
